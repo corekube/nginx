@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
-# Remove existing configs
+# Remove existing configs, if any
 rm /etc/nginx/conf.d/*.conf
 
 # Env says we're using SSL 
@@ -24,6 +24,13 @@ else
   echo "Enabling *Without* SSL..."
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
 fi
+
+# /etc/nginx-env/config (stored in K8s Secret 'nginx-env') holds:
+# SERVER_NAME
+source /etc/nginx-env/config
+
+# Insert env vars from /etc/nginx-env/config
+sed -i "s/{{SERVER_NAME}}/${SERVER_NAME}/g;" /etc/nginx/conf.d/proxy.conf
 
 cat /etc/nginx/conf.d/proxy.conf
 

@@ -35,7 +35,7 @@ cat > nginx-rc.yaml << EOF
                mountPath: /etc/nginx-env
                readOnly: true
        imagePullSecrets:
-         - name: tutum-registry-config
+         - name: docker-registry-config
        volumes:
          - name: nginx-env
            secret:

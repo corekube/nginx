@@ -1,0 +1,28 @@
+build:
+  box: nginx
+  # The steps that will be executed in the BUILD pipeline
+  steps:
+    # Copy conf files to proper location where nginx expects them
+    - script:
+        name: copy conf files & setup scripts
+        code: |
+          cp start.sh /usr/src/
+          cp nginx/nginx.conf /etc/nginx/
+          cp nginx/proxy*.conf /usr/src/
+
+    # Test nginx configuration
+    - script:
+        name: test config
+        code: |
+          mkdir -p /opt/ssl
+          cp fake/fake_ssl.key /opt/ssl/ssl.key
+          cp fake/fake_ssl.crt /opt/ssl/ssl.crt
+          cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
+          nginx -t -c /etc/nginx/nginx.conf
+
+  # Notify slack of build status
+  after-steps:
+      - slack-notifier:
+          url: $SLACK_URL
+          channel: notifications
+          username: wercker

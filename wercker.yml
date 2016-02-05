@@ -27,3 +27,17 @@ build:
           url: $SLACK_URL
           channel: notifications
           username: wercker
+
+deploy:
+  box: nginx
+  # The steps that will be executed in the DEPLOY pipeline
+  steps:
+    # Build & push a container
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        tag: $WERCKER_GIT_COMMIT
+        ports: "5000"
+        repository: $DOCKER_REPO
+        registry: $DOCKER_REGISTRY
+        entrypoint: /usr/src/start.sh

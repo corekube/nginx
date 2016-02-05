@@ -14,9 +14,9 @@ build:
     - script:
         name: test config
         code: |
-          mkdir -p /opt/ssl
-          cp fake/fake_ssl.key /opt/ssl/ssl.key
-          cp fake/fake_ssl.crt /opt/ssl/ssl.crt
+          mkdir -p /etc/nginx-secret
+          cp fake/fake_ssl.key /etc/nginx-secret/ssl.key
+          cp fake/fake_ssl.crt /etc/nginx-secret/ssl.crt
           cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
           sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
           nginx -t -c /etc/nginx/nginx.conf

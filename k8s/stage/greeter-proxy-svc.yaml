@@ -4,7 +4,7 @@
    name: nginx
    labels:
      name: nginx
-   namespace: staging
+   namespace: stage
  spec:
    type: NodePort
    ports:

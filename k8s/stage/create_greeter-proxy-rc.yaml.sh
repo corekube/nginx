@@ -7,7 +7,7 @@ cat > nginx-rc.yaml << EOF
    name: nginx
    labels:
      name: nginx
-   namespace: staging
+   namespace: stage
  spec:
    replicas: 1
    selector:
@@ -21,7 +21,7 @@ cat > nginx-rc.yaml << EOF
      spec:
        containers:
          - name: nginx
-           image: ${TUTUM_REPO}:${WERCKER_GIT_COMMIT}
+           image: ${DOCKER_REPO}:${WERCKER_GIT_COMMIT}
            env:
              - name: ENABLE_SSL
                value: "true"

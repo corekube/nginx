@@ -4,9 +4,9 @@ cat > nginx-rc.yaml << EOF
  apiVersion: v1
  kind: ReplicationController
  metadata:
-   name: nginx
+   name: nginx-rc
    labels:
-     name: nginx
+     name: nginx-rc
    namespace: prod
  spec:
    replicas: 2

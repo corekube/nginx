@@ -25,8 +25,6 @@ else
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
 fi
 
-show_val() { echo "${!1}"; }
-
 cat /etc/nginx/conf.d/proxy.conf
 
 echo "Starting nginx..."

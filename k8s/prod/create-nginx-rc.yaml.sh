@@ -31,13 +31,13 @@ cat > nginx-rc.yaml << EOF
              - name: https
                containerPort: 443
            volumeMounts:
-             - name: nginx-env
-               mountPath: /etc/nginx-env
+             - name: nginx-secret
+               mountPath: /etc/nginx-secret
                readOnly: true
        imagePullSecrets:
          - name: docker-registry-config
        volumes:
-         - name: nginx-env
+         - name: nginx-secret
            secret:
-             secretName: nginx-env
+             secretName: nginx-secret
 EOF

@@ -32,6 +32,14 @@ deploy:
   box: nginx
   # The steps that will be executed in the DEPLOY pipeline
   steps:
+    # Copy conf files to proper location where nginx expects them
+    - script:
+        name: copy conf files & setup scripts
+        code: |
+          cp start.sh /usr/src/
+          cp nginx/nginx.conf /etc/nginx/
+          cp nginx/proxy*.conf /usr/src/
+
     # Build & push a container
     - internal/docker-push:
         username: $DOCKER_USERNAME

@@ -23,6 +23,10 @@ build:
 
   # Notify slack of build status
   after-steps:
+    # Install deps
+    - install-packages:
+        packages: curl
+    # Notify slack
     - slack-notifier:
         url: $SLACK_URL
         channel: notifications
@@ -49,3 +53,14 @@ deploy:
         repository: $DOCKER_REPO
         registry: $DOCKER_REGISTRY
         entrypoint: /usr/src/start.sh
+
+  # Notify slack of build status
+  after-steps:
+    # Install deps
+    - install-packages:
+        packages: curl
+    # Notify slack
+    - slack-notifier:
+        url: $SLACK_URL
+        channel: notifications
+        username: wercker

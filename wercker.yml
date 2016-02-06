@@ -4,7 +4,7 @@ build:
   steps:
     # Copy conf files to proper location where nginx expects them
     - script:
-        name: copy conf files & setup scripts
+        name: assemble env
         code: |
           cp start.sh /usr/src/
           cp nginx/nginx.conf /etc/nginx/
@@ -12,7 +12,7 @@ build:
 
     # Test nginx configuration
     - script:
-        name: test config
+        name: test nginx.conf
         code: |
           mkdir -p /etc/nginx-secret
           cp fake/fake_ssl.key /etc/nginx-secret/ssl.key

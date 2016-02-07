@@ -34,10 +34,15 @@ cat > nginx-rc.yaml << EOF
              - name: nginx-secret
                mountPath: /etc/nginx-secret
                readOnly: true
+             - name: letsencrypt-pvc
+               mountPath: /letsencrypt
        imagePullSecrets:
          - name: docker-registry-config
        volumes:
          - name: nginx-secret
            secret:
              secretName: nginx-secret
+         - name: letsencrypt-pvc
+           persistentVolumeClaim:
+             claimName: letsencrypt-pvc
 EOF

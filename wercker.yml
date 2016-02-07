@@ -14,9 +14,11 @@ build:
     - script:
         name: test nginx.conf
         code: |
-          mkdir -p /etc/nginx-config-secret
-          cp fake/fake_ssl.key /etc/nginx-config-secret/ssl.key
-          cp fake/fake_ssl.crt /etc/nginx-config-secret/ssl.crt
+          mkdir -p /etc/nginx-ssl-secret
+          cp fake/fake_ssl.key /etc/nginx-ssl-secret/ssl.key
+          cp fake/fake_ssl.crt /etc/nginx-ssl-secret/ssl.crt
+          cp fake/fake_dhparams.pem /etc/nginx-ssl-secret/dhparams.pem
+          cp fake/fake_chain.pem /etc/nginx-ssl-secret/chain.pem
           cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
           sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
           nginx -t -c /etc/nginx/nginx.conf

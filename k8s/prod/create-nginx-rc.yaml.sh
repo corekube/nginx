@@ -37,7 +37,7 @@ cat > nginx-rc.yaml << EOF
              - name: letsencrypt-pvc
                mountPath: /letsencrypt
        imagePullSecrets:
-         - name: docker-registry-config
+         - name: registry-secret
        volumes:
          - name: nginx-config-secret
            secret:

@@ -1,5 +1,5 @@
 public
 _*
 *rc.yaml
-*secret
-*secret.yaml
+nginx-config-secret
+nginx-config-secret.yaml

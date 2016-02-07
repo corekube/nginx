@@ -25,11 +25,11 @@ else
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
 fi
 
-# /etc/nginx-secret/config (stored in K8s Secret 'nginx-secret') holds:
+# /etc/nginx-config-secret/env (stored in K8s Secret 'nginx-config-secret') holds:
 # SERVER_NAME
-source /etc/nginx-secret/config
+source /etc/nginx-config-secret/env
 
-# Insert env vars from /etc/nginx-secret/config
+# Insert env vars from /etc/nginx-config-secret/env
 sed -i "s/{{SERVER_NAME}}/${SERVER_NAME}/g;" /etc/nginx/conf.d/proxy.conf
 
 cat /etc/nginx/conf.d/proxy.conf

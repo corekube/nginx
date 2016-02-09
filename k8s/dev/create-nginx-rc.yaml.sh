@@ -37,10 +37,11 @@ cat > nginx-rc.yaml << EOF
              - name: nginx-ssl-secret
                mountPath: /etc/nginx-ssl-secret
                readOnly: true
-             - name: letsencrypt-pvc
-               mountPath: /letsencrypt
+             - name: nginx-letsencrypt-pvc
+               mountPath: /etc/letsencrypt
+               readOnly: false
        imagePullSecrets:
-         - name: registry-secret
+         - name: nginx-registry-secret
        volumes:
          - name: nginx-config-secret
            secret:
@@ -48,7 +49,7 @@ cat > nginx-rc.yaml << EOF
          - name: nginx-ssl-secret
            secret:
              secretName: nginx-ssl-secret
-         - name: letsencrypt-pvc
+         - name: nginx-letsencrypt-pvc
            persistentVolumeClaim:
-             claimName: letsencrypt-pvc
+             claimName: nginx-letsencrypt-pvc
 EOF

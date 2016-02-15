@@ -3,3 +3,4 @@ _*
 *rc.yaml
 nginx-config-secret
 nginx-config-secret.yaml
+wercker_*

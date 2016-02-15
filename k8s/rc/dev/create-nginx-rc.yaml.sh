@@ -22,9 +22,6 @@ cat > nginx-rc.yaml << EOF
        containers:
          - name: nginx
            image: ${DOCKER_REPO}:${WERCKER_GIT_COMMIT}
-           env:
-             - name: ENABLE_SSL
-               value: "true"
            ports:
              - name: http
                containerPort: 80
@@ -37,8 +34,8 @@ cat > nginx-rc.yaml << EOF
              - name: nginx-ssl-secret
                mountPath: /etc/nginx-ssl-secret
                readOnly: true
-             - name: nginx-letsencrypt-pvc
-               mountPath: /etc/letsencrypt
+             - name: nginx-nfs-pvc
+               mountPath: /srv/
                readOnly: false
        imagePullSecrets:
          - name: nginx-registry-secret
@@ -49,7 +46,7 @@ cat > nginx-rc.yaml << EOF
          - name: nginx-ssl-secret
            secret:
              secretName: nginx-ssl-secret
-         - name: nginx-letsencrypt-pvc
+         - name: nginx-nfs-pvc
            persistentVolumeClaim:
-             claimName: nginx-letsencrypt-pvc
+             claimName: nginx-nfs-pvc
 EOF

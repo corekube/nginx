@@ -7,7 +7,7 @@ cat > nginx-rc.yaml << EOF
    name: nginx-rc
    labels:
      name: nginx-rc
-   namespace: dev
+   namespace: nginx-dev
  spec:
    replicas: 1
    selector:

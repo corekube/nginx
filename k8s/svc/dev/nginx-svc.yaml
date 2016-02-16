@@ -4,7 +4,7 @@
    name: nginx-svc
    labels:
      name: nginx-svc
-   namespace: dev
+   namespace: nginx-dev
  spec:
    type: NodePort
    ports:

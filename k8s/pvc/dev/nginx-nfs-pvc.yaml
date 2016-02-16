@@ -2,7 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: nginx-nfs-pvc
-  namespace: dev
+  namespace: nginx-dev
 spec:
   accessModes:
     - ReadWriteMany

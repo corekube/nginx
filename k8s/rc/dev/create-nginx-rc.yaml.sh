@@ -37,8 +37,6 @@ cat > nginx-rc.yaml << EOF
              - name: nginx-nfs-pvc
                mountPath: /srv/
                readOnly: false
-       imagePullSecrets:
-         - name: nginx-registry-secret
        volumes:
          - name: nginx-config-secret
            secret:

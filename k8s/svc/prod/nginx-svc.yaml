@@ -4,7 +4,7 @@
    name: nginx-svc
    labels:
      name: nginx-svc
-   namespace: nginx-dev
+   namespace: nginx-prod
  spec:
    type: NodePort
    ports:
@@ -16,6 +16,6 @@
      port: 443
      protocol: TCP
      targetPort: https
-     nodePort: 30102
+     nodePort: 30100
    selector:
      name: nginx

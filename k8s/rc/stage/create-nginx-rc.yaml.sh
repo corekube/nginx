@@ -20,6 +20,45 @@ cat > nginx-rc.yaml << EOF
          deployment: ${WERCKER_GIT_COMMIT}
      spec:
        containers:
+         - name: git-sync
+           image: gcr.io/google_containers/git-sync
+           imagePullPolicy: Always
+           args:
+             - -rev=origin/master
+           volumeMounts:
+             - name: markdown
+               mountPath: /git
+               readOnly: false
+           env:
+             - name: GIT_SYNC_REPO
+               value: https://github.com/corekube/web
+             - name: GIT_SYNC_DEST
+               value: /git
+             - name: GIT_SYNC_WAIT
+               value: "60"
+         - name: hugo
+           image: gcr.io/google_containers/hugo
+           imagePullPolicy: Always
+           args:
+             - server
+             - --source=\${HUGO_SRC}
+             - --theme=\${HUGO_THEME}
+             - --baseUrl=\${HUGO_BASE_URL}
+             - --destination=\${HUGO_DEST}
+             - --appendPort=false
+             - --watch
+             - --disableLiveReload
+           volumeMounts:
+             - name: markdown
+               mountPath: /src
+               readOnly: false
+             - name: html
+               mountPath: /dest
+           env:
+             - name: HUGO_THEME
+               value: herring-cove
+             - name: HUGO_BASE_URL
+               value: ${SERVER_NAME}
          - name: nginx
            image: ${DOCKER_REPO}:${WERCKER_GIT_COMMIT}
            ports:
@@ -37,6 +76,9 @@ cat > nginx-rc.yaml << EOF
              - name: nginx-nfs-pvc
                mountPath: /srv/
                readOnly: false
+             - name: html
+               mountPath: /usr/share/nginx/html
+               readOnly: true
        volumes:
          - name: nginx-config-secret
            secret:
@@ -47,4 +89,8 @@ cat > nginx-rc.yaml << EOF
          - name: nginx-nfs-pvc
            persistentVolumeClaim:
              claimName: nginx-nfs-pvc
+         - name: markdown
+           emptyDir: {}
+         - name: html
+           emptyDir: {}
 EOF

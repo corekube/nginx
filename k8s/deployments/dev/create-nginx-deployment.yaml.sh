@@ -1,23 +1,20 @@
 #!/bin/bash
 
-cat > nginx-rc.yaml << EOF
- apiVersion: v1
- kind: ReplicationController
+cat > nginx-deployment.yaml << EOF
+ apiVersion: extensions/v1beta1
+ kind: Deployment
  metadata:
-   name: nginx-rc
+   name: nginx-deployment
    labels:
-     name: nginx-rc
+     name: nginx-deployment
+     rev: ${WERCKER_GIT_COMMIT}
    namespace: nginx-dev
  spec:
    replicas: 1
-   selector:
-     name: nginx
-     deployment: ${WERCKER_GIT_COMMIT}
    template:
      metadata:
        labels:
          name: nginx
-         deployment: ${WERCKER_GIT_COMMIT}
      spec:
        containers:
          - name: git-sync

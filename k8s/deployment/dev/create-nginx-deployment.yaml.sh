@@ -90,4 +90,6 @@ cat > nginx-deployment.yaml << EOF
            emptyDir: {}
          - name: html
            emptyDir: {}
+         - name: delete
+           emptyDir: {}
 EOF

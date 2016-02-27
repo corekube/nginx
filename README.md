@@ -55,3 +55,10 @@ This nginx webserver:
           }
         }
         ```
+  3. And lastly, serves the static HTML for the blog that is faciliated by:
+
+    * The [gcr.io/google_containers/git-sync](gcr.io/google_containers/git-sync) container in the Pod that is continuously syncing with [corekube/web](https://github.com/corekube/web) for the latest Markdown files, and then storing the updates in an `emptyDir` named `markdown`
+    * The [gcr.io/google_containers/hugo](gcr.io/google_containers/hugo) container in the Pod that is also actively watching & converting the `markdown` volume (filled by `git-sync`) into static HTML pages, and then storing the HTML in an `emptyDir` named `html`
+    * The `nginx` container then uses the `html` volume to serve the static HTML in its `root` location
+      * So the flow of Markdown files to the blog itself, is as follows:
+        * Markdown PR -> [corekube/web](https://github.com/corekube/web) -> `markdown` vol per `git-sync` -> `html` vol per `hugo` -> `nginx`

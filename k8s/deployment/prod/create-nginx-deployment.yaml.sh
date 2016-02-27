@@ -32,7 +32,7 @@ cat > nginx-deployment.yaml << EOF
              - name: GIT_SYNC_DEST
                value: /git
              - name: GIT_SYNC_WAIT
-               value: "60"
+               value: "120"
          - name: hugo
            image: gcr.io/google_containers/hugo
            imagePullPolicy: Always

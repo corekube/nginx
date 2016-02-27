@@ -21,7 +21,7 @@ cat > nginx-deployment.yaml << EOF
            image: gcr.io/google_containers/git-sync
            imagePullPolicy: Always
            args:
-             - -rev=origin/master
+             - -rev=origin/dev
            volumeMounts:
              - name: markdown
                mountPath: /git
@@ -29,6 +29,8 @@ cat > nginx-deployment.yaml << EOF
            env:
              - name: GIT_SYNC_REPO
                value: https://github.com/corekube/web
+             - name: GIT_SYNC_BRANCH
+               value: dev
              - name: GIT_SYNC_DEST
                value: /git
              - name: GIT_SYNC_WAIT

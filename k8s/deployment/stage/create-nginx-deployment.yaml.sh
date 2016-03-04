@@ -23,7 +23,6 @@ cat > nginx-deployment.yaml << EOF
            volumeMounts:
              - name: markdown
                mountPath: /git
-               readOnly: false
            env:
              - name: GIT_SYNC_REPO
                value: https://github.com/corekube/web
@@ -50,7 +49,6 @@ cat > nginx-deployment.yaml << EOF
            volumeMounts:
              - name: markdown
                mountPath: /src
-               readOnly: false
              - name: html
                mountPath: /dest
            env:
@@ -74,7 +72,6 @@ cat > nginx-deployment.yaml << EOF
                readOnly: true
              - name: nginx-nfs-pvc
                mountPath: /srv/
-               readOnly: false
              - name: html
                mountPath: /usr/share/nginx/html
                readOnly: true

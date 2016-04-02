@@ -21,7 +21,7 @@ source /etc/nginx-config-secret/env
 rm /etc/nginx/conf.d/*.conf
 
 # Env says we're using SSL 
-if [ -n "${ENABLE_SSL+1}" ] && [ "${ENABLE_SSL,,}" = "true" ]; then
+if [ $ENABLE_SSL ]; then
   echo "Enabling SSL..."
   cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
 else
@@ -31,7 +31,7 @@ else
 fi
 
 # Insert env vars from /etc/nginx-config-secret/env
-sed -i "s/{{SERVER_NAME}}/${SERVER_NAME}/g;" /etc/nginx/conf.d/proxy.conf
+sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
 
 cat /etc/nginx/conf.d/proxy.conf
 

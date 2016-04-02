@@ -10,15 +10,17 @@ build:
           cp nginx/nginx.conf /etc/nginx/
           cp nginx/proxy*.conf /usr/src/
 
-    # Test nginx configuration
+    # Unit tests
     - script:
-        name: test nginx.conf
+        name: unit tests
         code: |
-          mkdir -p /etc/nginx-ssl-secret
-          cp wercker/fake-ssl/* /etc/nginx-ssl-secret/
-          cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
-          sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
-          nginx -t -c /etc/nginx/nginx.conf
+          ./hack/test-nginx.sh
+
+    # Integration tests
+    - script:
+        name: integration tests
+        code: |
+          ./hack/test-integrations.sh
 
   # Notify slack of build status
   after-steps:

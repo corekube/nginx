@@ -45,16 +45,21 @@ wget --quiet https://storage.googleapis.com/kubernetes-release/release/v$KUBERNE
 chmod +x /usr/local/bin/kubectl
 
 # configure kubectl
-namespace="integration-test-`date +%s`"
+NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
 /usr/local/bin/kubectl config set-cluster local --server=https://127.0.0.1:9443
 /usr/local/bin/kubectl config set-cluster local --certificate-authority=/$CERTS_DIR/ca.crt
 /usr/local/bin/kubectl config set-credentials wercker --client-certificate=$CERTS_DIR/kubecfg.crt
 /usr/local/bin/kubectl config set-credentials wercker --client-key=$CERTS_DIR/kubecfg.key
 /usr/local/bin/kubectl config set-context local --cluster=local
 /usr/local/bin/kubectl config set-context local --user=wercker
-/usr/local/bin/kubectl config set-context local --namespace=$namespace
+/usr/local/bin/kubectl config set-context local --namespace=$NAMESPACE
 /usr/local/bin/kubectl config use-context local
 
 # test kubectl
 /usr/local/bin/kubectl version
-/usr/local/bin/kubectl create ns $namespace
+/usr/local/bin/kubectl create ns $NAMESPACE
+/usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;
+
+if [ "$ACTION" == create ]; then
+  /usr/local/bin/kubectl create ns $NAMESPACE
+fi

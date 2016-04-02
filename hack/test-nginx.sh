@@ -1,10 +1,11 @@
 #!/bin/bash
 
-mkdir -p /etc/nginx-ssl-secret
+mkdir -p /etc/ssl-config
 
-cp wercker/fake-ssl/* /etc/nginx-ssl-secret/
+cp wercker/fake-ssl/* /etc/ssl-config/
 cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
 
-sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
+FAKE_SERVER_NAME=example.com
+sed -i "s/{{SERVER_NAME}}/$FAKE_SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
 
 nginx -t -c /etc/nginx/nginx.conf

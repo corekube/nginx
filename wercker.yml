@@ -4,15 +4,7 @@ build:
   # The steps that will be executed in the BUILD pipeline
   steps:
     - install-packages:
-      packages: curl openssh-client wget
-    - add-ssh-key:
-        keyname: KUBERNETES_SSH_KEY
-    - add-to-known_hosts:
-        hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
-    - add-to-known_hosts:
-        hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+      packages: curl wget openssh-client
 
     # Copy conf files to proper location where nginx expects them
     - script:
@@ -26,6 +18,26 @@ build:
         code: |
           ./hack/test-nginx.sh
 
+    # Build & push a container
+    - internal/docker-push:
+        disable-sync: true
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        tag: $WERCKER_GIT_COMMIT
+        ports: "5000"
+        repository: $DOCKER_REPO
+        registry: $DOCKER_REGISTRY
+        entrypoint: /usr/src/start.sh
+
+    - add-ssh-key:
+        keyname: KUBERNETES_SSH_KEY
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+
     # Setup kubectl
     - script:
         name: download & setup kubectl
@@ -38,8 +50,19 @@ build:
         code: |
           ./hack/test-integrations.sh
 
-  # Notify slack of build status
   after-steps:
+    # Setup kubectl
+    - script:
+        name: download & setup kubectl
+        code: |
+          ./hack/setup-kubectl.sh
+
+    # Cleanup integration
+    - script:
+        name: cleanup
+        code: |
+          ./hack/cleanup.sh
+
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL

@@ -1,20 +1,36 @@
 build:
   box: nginx
+
   # The steps that will be executed in the BUILD pipeline
   steps:
+    - install-packages:
+      packages: curl openssh-client wget
+    - add-ssh-key:
+        keyname: KUBERNETES_SSH_KEY
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+
     # Copy conf files to proper location where nginx expects them
     - script:
-        name: assemble env
+        name: configure nginx
         code: |
-          cp start.sh /usr/src/
-          cp nginx/nginx.conf /etc/nginx/
-          cp nginx/proxy*.conf /usr/src/
+          ./hack/setup-nginx.sh
 
     # Unit tests
     - script:
         name: unit tests
         code: |
           ./hack/test-nginx.sh
+
+    # Setup kubectl
+    - script:
+        name: download & setup kubectl
+        code: |
+          ./hack/setup-kubectl.sh
 
     # Integration tests
     - script:
@@ -24,9 +40,6 @@ build:
 
   # Notify slack of build status
   after-steps:
-    # Install deps
-    - install-packages:
-        packages: curl
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL
@@ -35,18 +48,21 @@ build:
 
 deploy:
   box: nginx
+
   # The steps that will be executed in the DEPLOY pipeline
   steps:
+    - install-packages:
+      packages: curl
+
     # Copy conf files to proper location where nginx expects them
     - script:
-        name: copy conf files & setup scripts
+        name: configure nginx
         code: |
-          cp start.sh /usr/src/
-          cp nginx/nginx.conf /etc/nginx/
-          cp nginx/proxy*.conf /usr/src/
+          ./hack/setup-nginx.sh
 
     # Build & push a container
     - internal/docker-push:
+        disable-sync: true
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
         tag: $WERCKER_GIT_COMMIT
@@ -57,9 +73,6 @@ deploy:
 
   # Notify slack of build status
   after-steps:
-    # Install deps
-    - install-packages:
-        packages: curl
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL

@@ -63,6 +63,21 @@ cat > nginx-deployment.yaml << EOF
                containerPort: 80
              - name: https
                containerPort: 443
+           livenessProbe:
+             httpGet:
+               path: /
+               port: 443
+               scheme: HTTPS
+             initialDelaySeconds: 10
+             periodSeconds: 30
+             timeoutSeconds: 5
+           readinessProbe:
+             httpGet:
+               path: /
+               port: 443
+               scheme: HTTPS
+             initialDelaySeconds: 30
+             timeoutSeconds: 1
            volumeMounts:
              - name: nginx-config-secret
                mountPath: /etc/nginx-config-secret

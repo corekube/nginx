@@ -57,7 +57,6 @@ NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
 
 # test kubectl
 /usr/local/bin/kubectl version
-/usr/local/bin/kubectl create ns $NAMESPACE
 /usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;
 
 if [ "$ACTION" == create ]; then

@@ -12,11 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
-# /etc/nginx-config-secret/env (stored in K8s Secret 'nginx-config-secret') holds:
-# SERVER_NAME
-# ENABLE_SSL
-source /etc/nginx-config-secret/env
-
 # Remove existing configs, if any
 rm /etc/nginx/conf.d/*.conf
 

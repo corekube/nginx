@@ -92,16 +92,13 @@ while [ "$i" -lt $ITERATIONS ]; do
   echo "$STATUS"
 
   if isReady $PROJ_NAME-deployment; then
-    break
+    echo "Deployment creation successful."
+    exit 0
   fi
 
   sleep $SLEEP_INTERVAL;
   i=$((i+1))
 done
 
-if isReady $PROJ_NAME-deployment; then
-  echo "Deployment creation successful."
-else
-  echo "Deployment creation failed: timed out after $ITERATIONS seconds."
-  exit 1
-fi
+echo "Deployment creation failed."
+exit 1

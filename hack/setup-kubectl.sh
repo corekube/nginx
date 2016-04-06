@@ -43,6 +43,7 @@ ssh -i $IDENTITY_FILE -L 9443:$KUBERNETES_MASTER_PRIVATE_IP:443 root@$KUBERNETES
 # pull down kubectl
 wget --quiet https://storage.googleapis.com/kubernetes-release/release/v$KUBERNETES_VERSION/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
+/usr/local/bin/kubectl version
 
 # configure kubectl
 NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
@@ -52,13 +53,11 @@ NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
 /usr/local/bin/kubectl config set-credentials wercker --client-key=$CERTS_DIR/kubecfg.key
 /usr/local/bin/kubectl config set-context local --cluster=local
 /usr/local/bin/kubectl config set-context local --user=wercker
-/usr/local/bin/kubectl config set-context local --namespace=$NAMESPACE
 /usr/local/bin/kubectl config use-context local
 
-# test kubectl
-/usr/local/bin/kubectl version
 /usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;
-
 if [ "$ACTION" == create ]; then
   /usr/local/bin/kubectl create ns $NAMESPACE
 fi
+
+/usr/local/bin/kubectl config set-context local --namespace=$NAMESPACE

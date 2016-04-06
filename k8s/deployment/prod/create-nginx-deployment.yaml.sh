@@ -47,7 +47,7 @@ cat > nginx-deployment.yaml << EOF
                path: /
                port: 443
                scheme: HTTPS
-             initialDelaySeconds: 30
+             initialDelaySeconds: 5
              timeoutSeconds: 1
            volumeMounts:
              - name: ssl-config

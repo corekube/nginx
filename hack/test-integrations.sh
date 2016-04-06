@@ -92,7 +92,10 @@ while [ "$i" -lt $ITERATIONS ]; do
   echo "$STATUS"
 
   if isReady $PROJ_NAME-deployment; then
+    kubectl describe po -l name=$PROJ_NAME
+    echo "==============================="
     echo "Deployment creation successful."
+    echo "==============================="
     exit 0
   fi
 
@@ -100,5 +103,8 @@ while [ "$i" -lt $ITERATIONS ]; do
   i=$((i+1))
 done
 
+kubectl describe po -l name=$PROJ_NAME
+echo "==============================="
 echo "Deployment creation failed."
+echo "==============================="
 exit 1

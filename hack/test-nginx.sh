@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mkdir -p /etc/ssl-config
+mkdir -p /etc/ssl-secret
 
-cp wercker/fake-ssl/* /etc/ssl-config/
+cp wercker/fake-ssl/* /etc/ssl-secret/
 cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
 
 FAKE_SERVER_NAME=example.com

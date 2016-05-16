@@ -8,60 +8,64 @@ build:
 
     # Copy conf files to proper location where nginx expects them
     - script:
-        name: configure nginx
+        name: setup & config nginx
         code: |
           ./hack/setup-nginx.sh
 
     # Unit tests
     - script:
-        name: unit tests
+        name: run build tests
         code: |
           ./hack/test-nginx.sh
 
-    # Build & push a container
+    # Source repo envvars for used to build Docker image
+    - script:
+        name: source repo envvars
+        code: |
+          source repo-envvars.sh
+
+    # Build & push a Docker image
     - internal/docker-push:
-        disable-sync: true
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
-        tag: $WERCKER_GIT_COMMIT
+        tag: $IMAGE_TAG
         ports: "5000"
         repository: $DOCKER_REPO
-        registry: $DOCKER_REGISTRY
         entrypoint: /usr/src/start.sh
 
-    - add-ssh-key:
-        keyname: KUBERNETES_SSH_KEY
-    - add-to-known_hosts:
-        hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
-    - add-to-known_hosts:
-        hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+    #- add-ssh-key:
+    #    keyname: KUBERNETES_SSH_KEY
+    #- add-to-known_hosts:
+    #    hostname: $KUBERNETES_MASTER_PUBLIC_IP
+    #    fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+    #- add-to-known_hosts:
+    #    hostname: $KUBERNETES_MASTER_PUBLIC_IP
+    #    fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
 
-    # Setup kubectl
-    - script:
-        name: download & setup kubectl
-        code: |
-          ./hack/setup-kubectl.sh
+    ## Setup kubectl
+    #- script:
+    #    name: download & setup kubectl
+    #    code: |
+    #      ./hack/setup-kubectl.sh
 
-    # Integration tests
-    - script:
-        name: integration tests
-        code: |
-          ./hack/test-integrations.sh
+    ## Integration tests
+    #- script:
+    #    name: integration tests
+    #    code: |
+    #      ./hack/test-integrations.sh
 
   after-steps:
-    # Setup kubectl
-    - script:
-        name: download & setup kubectl
-        code: |
-          ./hack/setup-kubectl.sh
+    ## Setup kubectl
+    #- script:
+    #    name: download & setup kubectl
+    #    code: |
+    #      ./hack/setup-kubectl.sh
 
-    # Cleanup integration
-    - script:
-        name: cleanup
-        code: |
-          ./hack/cleanup.sh
+    ## Cleanup integration
+    #- script:
+    #    name: cleanup
+    #    code: |
+    #      ./hack/cleanup.sh
 
     # Notify slack
     - slack-notifier:
@@ -79,7 +83,7 @@ deploy:
 
     # Copy conf files to proper location where nginx expects them
     - script:
-        name: configure nginx
+        name: setup & config nginx
         code: |
           ./hack/setup-nginx.sh
 

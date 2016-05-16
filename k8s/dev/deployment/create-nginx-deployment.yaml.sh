@@ -5,19 +5,19 @@ cat > nginx-deployment.yaml << EOF
  kind: Deployment
  metadata:
    name: nginx-deployment
-   labels:
-     name: nginx-deployment
-     rev: ${WERCKER_GIT_COMMIT}
  spec:
-   replicas: 3
+   replicas: 1
    template:
      metadata:
+       name: nginx
        labels:
-         name: nginx
+         app: nginx
+         env: dev
+         tag: ${IMAGE_TAG}
      spec:
        containers:
          - name: nginx
-           image: ${DOCKER_REPO}:${WERCKER_GIT_COMMIT}
+           image: ${DOCKER_REPO}:${IMAGE_TAG}
            env:
              - name: SERVER_NAME
                valueFrom:
@@ -50,17 +50,17 @@ cat > nginx-deployment.yaml << EOF
              initialDelaySeconds: 5
              timeoutSeconds: 1
            volumeMounts:
-             - name: ssl-config
-               mountPath: /etc/ssl-config
+             - name: ssl-secret
+               mountPath: /etc/ssl-secret
              - name: nginx-nfs-pvc
                mountPath: /srv/
        volumes:
          - name: nginx-config
            configMap:
              name: nginx-config
-         - name: ssl-config
+         - name: ssl-secret
            configMap:
-             name: ssl-config
+             name: ssl-secret
          - name: nginx-nfs-pvc
            persistentVolumeClaim:
              claimName: nginx-nfs-pvc

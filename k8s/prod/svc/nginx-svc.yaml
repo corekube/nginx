@@ -15,6 +15,7 @@
      port: 443
      protocol: TCP
      targetPort: https
-     nodePort: 30102
+     nodePort: 30100
    selector:
-     name: nginx
+     app: nginx
+     env: prod

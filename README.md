@@ -6,7 +6,7 @@ A nginx Docker container that is deployed on Kubernetes to serve local, static c
 
 This nginx webserver:
 
-  1. Configures nginx according to settings outlined in a ConfigMap named `nginx-config`:
+  1. Configures nginx according to settings outlined in a ConfigMap named `nginx-config` (included in code):
     * Configuration settings to be used in nginx are provided via a Kubernetes ConfigMap named `nginx-config-secret`, defined as such as:
 
       ```
@@ -18,7 +18,7 @@ This nginx webserver:
          server.name: "corekube.com"
          enable.ssl: "true"
       ```
-    * Configures nginx's SSL/TLS certs according to settings outlined in a ConfigMap named `ssl-secret`
+    * Configures nginx's SSL/TLS certs according to settings outlined in a ConfigMap named `ssl-secret` (not included in code)
       * The required certs are based off of the [letsencrypt.org](https://letsencrypt.org) cert directory structure in `/etc/letsencrypt/live/<DOMAIN>` and are expected to be defined in `ssl-secret` as such:
   
         ```

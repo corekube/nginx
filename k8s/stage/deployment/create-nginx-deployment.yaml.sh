@@ -23,6 +23,11 @@ cat > nginx-deployment.yaml << EOF
                  configMapKeyRef:
                    name: nginx-config
                    key: server.name
+             - name: ROOT_DIR
+               valueFrom:
+                 configMapKeyRef:
+                   name: nginx-config
+                   key: root.dir
              - name: ENABLE_SSL
                valueFrom:
                  configMapKeyRef:

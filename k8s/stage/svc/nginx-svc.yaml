@@ -15,6 +15,7 @@
      port: 443
      protocol: TCP
      targetPort: https
-     nodePort: 30100
+     nodePort: 30101
    selector:
-     name: nginx
+     app: nginx
+     env: stage

@@ -13,7 +13,6 @@ cat > nginx-deployment.yaml << EOF
        labels:
          app: nginx
          env: prod
-         tag: ${IMAGE_TAG}
      spec:
        containers:
          - name: nginx

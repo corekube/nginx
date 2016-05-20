@@ -4,4 +4,5 @@ metadata:
   name: nginx-config
 data:
   server.name: "stage.corekube.com"
+  root.dir: "/srv/data/stage/dest"
   enable.ssl: "true"

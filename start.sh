@@ -25,8 +25,9 @@ else
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
 fi
 
-# Insert env vars from /etc/nginx-config-secret/env
-sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g;" /etc/nginx/conf.d/proxy.conf
+# Insert env vars from nginx-config
+sed -i "s#{{SERVER_NAME}}#$SERVER_NAME#g;" /etc/nginx/conf.d/proxy.conf
+sed -i "s#{{ROOT_DIR}}#$ROOT_DIR#g;" /etc/nginx/conf.d/proxy.conf
 
 cat /etc/nginx/conf.d/proxy.conf
 

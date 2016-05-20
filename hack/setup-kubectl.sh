@@ -52,6 +52,7 @@ chmod +x /usr/local/bin/kubectl
 /usr/local/bin/kubectl config set-credentials wercker --client-certificate=$CERTS_DIR/kubecfg.crt
 /usr/local/bin/kubectl config set-credentials wercker --client-key=$CERTS_DIR/kubecfg.key
 /usr/local/bin/kubectl config set-context local --cluster=local
+/usr/local/bin/kubectl config set-context local --user=wercker
 /usr/local/bin/kubectl config use-context local
 
 #/usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;

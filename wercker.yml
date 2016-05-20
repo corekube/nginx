@@ -4,7 +4,7 @@ build:
   # The steps that will be executed in the BUILD pipeline
   steps:
     - install-packages:
-      packages: curl wget openssh-client
+      packages: curl
 
     # Copy conf files to proper location where nginx expects them
     - script:
@@ -50,7 +50,7 @@ build:
     - slack-notifier:
         url: $SLACK_URL
         channel: notifications
-        username: $SLACK_URL
+        username: $SLACK_USER
 
 deploy:
   box: nginx
@@ -58,6 +58,9 @@ deploy:
 
   # Stage deploy target
   stage:
+    - install-packages:
+      packages: curl wget openssh-client
+
     - add-ssh-key:
         keyname: KUBERNETES_SSH_KEY
     - add-to-known_hosts:

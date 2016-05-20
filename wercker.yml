@@ -50,7 +50,7 @@ build:
     - slack-notifier:
         url: $SLACK_URL
         channel: notifications
-        username: $SLACK_URL
+        username: $SLACK_USER
 
 deploy:
   box: nginx

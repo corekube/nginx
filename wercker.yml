@@ -82,6 +82,32 @@ deploy:
         code: |
           ./rollout.sh -e stage
 
+  # Stage deploy target
+  prod:
+    - install-packages:
+      packages: curl wget openssh-client
+
+    - add-ssh-key:
+        keyname: KUBERNETES_SSH_KEY
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+
+    # Setup kubectl
+    - script:
+        name: download & setup kubectl
+        code: |
+          ./hack/setup-kubectl.sh
+
+    # rollout
+    - script:
+        name: rollout to prod
+        code: |
+          ./rollout.sh -e prod
+
   # Notify slack of build status
   after-steps:
     # Notify slack

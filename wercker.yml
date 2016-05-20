@@ -76,7 +76,7 @@ deploy:
         code: |
           ./hack/setup-kubectl.sh
 
-    # Source repo envvars for used to build Docker image
+    # rollout
     - script:
         name: rollout to stage
         code: |

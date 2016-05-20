@@ -7,7 +7,7 @@ A nginx Docker container that is deployed on Kubernetes to serve local, static c
 This nginx webserver:
 
   1. Configures nginx according to settings outlined in a ConfigMap named `nginx-config` (included in code):
-    * Configuration settings to be used in nginx are provided via a Kubernetes ConfigMap named `nginx-config-secret`, defined as such as:
+    * Configuration settings to be used in nginx are provided via a Kubernetes ConfigMap named `nginx-config`, defined as such as:
 
       ```
        apiVersion: v1

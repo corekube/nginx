@@ -24,6 +24,12 @@ build:
         code: |
           source repo-envvars.sh
 
+    ## Integration tests
+    #- script:
+    #    name: integration tests
+    #    code: |
+    #      ./hack/test-integrations.sh
+
     # Build & push a Docker image
     - internal/docker-push:
         username: $DOCKER_USERNAME
@@ -33,35 +39,8 @@ build:
         repository: $DOCKER_REPO
         entrypoint: /usr/src/start.sh
 
-    #- add-ssh-key:
-    #    keyname: KUBERNETES_SSH_KEY
-    #- add-to-known_hosts:
-    #    hostname: $KUBERNETES_MASTER_PUBLIC_IP
-    #    fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
-    #- add-to-known_hosts:
-    #    hostname: $KUBERNETES_MASTER_PUBLIC_IP
-    #    fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
-
-    ## Setup kubectl
-    #- script:
-    #    name: download & setup kubectl
-    #    code: |
-    #      ./hack/setup-kubectl.sh
-
-    ## Integration tests
-    #- script:
-    #    name: integration tests
-    #    code: |
-    #      ./hack/test-integrations.sh
-
   after-steps:
-    ## Setup kubectl
-    #- script:
-    #    name: download & setup kubectl
-    #    code: |
-    #      ./hack/setup-kubectl.sh
-
-    ## Cleanup integration
+    ## Cleanup integration tests
     #- script:
     #    name: cleanup
     #    code: |
@@ -71,32 +50,34 @@ build:
     - slack-notifier:
         url: $SLACK_URL
         channel: notifications
-        username: wercker
+        username: $SLACK_URL
 
 deploy:
   box: nginx
-
   # The steps that will be executed in the DEPLOY pipeline
-  steps:
-    - install-packages:
-      packages: curl
 
-    # Copy conf files to proper location where nginx expects them
+  # Stage deploy target
+  stage:
+    - add-ssh-key:
+        keyname: KUBERNETES_SSH_KEY
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+    - add-to-known_hosts:
+        hostname: $KUBERNETES_MASTER_PUBLIC_IP
+        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+
+    # Setup kubectl
     - script:
-        name: setup & config nginx
+        name: download & setup kubectl
         code: |
-          ./hack/setup-nginx.sh
+          ./hack/setup-kubectl.sh
 
-    # Build & push a container
-    - internal/docker-push:
-        disable-sync: true
-        username: $DOCKER_USERNAME
-        password: $DOCKER_PASSWORD
-        tag: $WERCKER_GIT_COMMIT
-        ports: "5000"
-        repository: $DOCKER_REPO
-        registry: $DOCKER_REGISTRY
-        entrypoint: /usr/src/start.sh
+    # Source repo envvars for used to build Docker image
+    - script:
+        name: rollout to stage
+        code: |
+          ./rollout.sh -e stage
 
   # Notify slack of build status
   after-steps:
@@ -104,4 +85,4 @@ deploy:
     - slack-notifier:
         url: $SLACK_URL
         channel: notifications
-        username: wercker
+        username: $SLACK_USER

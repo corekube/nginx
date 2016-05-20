@@ -46,18 +46,17 @@ chmod +x /usr/local/bin/kubectl
 /usr/local/bin/kubectl version
 
 # configure kubectl
-NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
+#NAMESPACE="integration-test-${WERCKER_GIT_COMMIT:0:5}"
 /usr/local/bin/kubectl config set-cluster local --server=https://127.0.0.1:9443
 /usr/local/bin/kubectl config set-cluster local --certificate-authority=/$CERTS_DIR/ca.crt
 /usr/local/bin/kubectl config set-credentials wercker --client-certificate=$CERTS_DIR/kubecfg.crt
 /usr/local/bin/kubectl config set-credentials wercker --client-key=$CERTS_DIR/kubecfg.key
 /usr/local/bin/kubectl config set-context local --cluster=local
-/usr/local/bin/kubectl config set-context local --user=wercker
 /usr/local/bin/kubectl config use-context local
 
-/usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;
-if [ "$ACTION" == create ]; then
-  /usr/local/bin/kubectl create ns $NAMESPACE
-fi
+#/usr/local/bin/kubectl get ns $NAMESPACE && ACTION=null || ACTION=create;
+#if [ "$ACTION" == create ]; then
+#  /usr/local/bin/kubectl create ns $NAMESPACE
+#fi
 
-/usr/local/bin/kubectl config set-context local --namespace=$NAMESPACE
+#/usr/local/bin/kubectl config set-context local --namespace=$NAMESPACE

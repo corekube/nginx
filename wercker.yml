@@ -74,7 +74,9 @@ deploy:
     - script:
         name: download & setup kubectl
         code: |
-          ./hack/setup-kubectl.sh
+          wget -O /tmp/setup-kubectl.sh https://gist.githubusercontent.com/metral/ce436c6d70b4324262b8dcbd81ce8f34/raw/f3248247281f663ff4471cce0bc54f01aad59bb6/setup-wercker-kubectl.sh
+          chmod +x /tmp/setup-kubectl.sh
+          /tmp/setup-kubectl.sh
 
     # rollout
     - script:
@@ -82,7 +84,7 @@ deploy:
         code: |
           ./rollout.sh -e stage
 
-  # Stage deploy target
+  # Prod deploy target
   prod:
     - install-packages:
       packages: curl wget openssh-client
@@ -100,7 +102,9 @@ deploy:
     - script:
         name: download & setup kubectl
         code: |
-          ./hack/setup-kubectl.sh
+          wget -O /tmp/setup-kubectl.sh https://gist.githubusercontent.com/metral/ce436c6d70b4324262b8dcbd81ce8f34/raw/f3248247281f663ff4471cce0bc54f01aad59bb6/setup-wercker-kubectl.sh
+          chmod +x /tmp/setup-kubectl.sh
+          /tmp/setup-kubectl.sh
 
     # rollout
     - script:

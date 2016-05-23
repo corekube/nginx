@@ -51,9 +51,7 @@ kubectl --namespace=$NAMESPACE apply -f $SSL_SECRET_FILEPATH
 # apply || replace deployment
 DEPLOYMENT_FILEPATH=k8s/$APP_ENV/deployment/$APP_NAME-deployment.yaml
 pushd k8s/$APP_ENV/deployment > /dev/null
-DOCKER_REPO=$DOCKER_REPO \
-  IMAGE_TAG=$IMAGE_TAG \
-  ./create-$APP_NAME-deployment.yaml.sh
+./create-$APP_NAME-deployment.yaml.sh
 popd > /dev/null
 
 if [ "$REPLACE_DEPLOYMENT" = true ] ; then

@@ -13,6 +13,7 @@ cat > nginx-deployment.yaml << EOF
        labels:
          app: nginx
          env: prod
+         rev: "${BUILD_COMMIT}"
      spec:
        containers:
          - name: nginx

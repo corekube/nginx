@@ -53,4 +53,4 @@ This nginx webserver:
           }
         }
         ```
-  3. And lastly, serves the static HTML stored at `root     /srv/data/{{SERVER_NAME}}/dest`
+  3. And lastly, serves the static HTML stored in the root directory, specified by `root.dir` in the `nginx-config` ConfigMap

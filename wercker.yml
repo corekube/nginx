@@ -18,12 +18,6 @@ build:
         code: |
           ./hack/test-nginx.sh
 
-    # Source repo envvars for used to build Docker image
-    - script:
-        name: source repo envvars
-        code: |
-          source repo-envvars.sh
-
     ## Integration tests
     #- script:
     #    name: integration tests

@@ -24,6 +24,12 @@ build:
     #    code: |
     #      ./hack/test-integrations.sh
 
+    # Source repo envvars for used to build Docker image
+    - script:
+        name: source repo envvars
+        code: |
+          source repo-envvars.sh
+
     # Build & push a Docker image
     - internal/docker-push:
         username: $DOCKER_USERNAME

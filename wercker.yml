@@ -1,11 +1,8 @@
 build:
-  box: nginx
+  box: corekube/nginx:1.10.0
 
   # The steps that will be executed in the BUILD pipeline
   steps:
-    - install-packages:
-      packages: curl
-
     # Copy conf files to proper location where nginx expects them
     - script:
         name: setup & config nginx
@@ -53,14 +50,11 @@ build:
         username: $SLACK_USER
 
 deploy:
-  box: nginx
+  box: corekube/nginx:1.10.0
   # The steps that will be executed in the DEPLOY pipeline
 
   # Stage deploy target
   stage:
-    - install-packages:
-      packages: curl wget openssh-client
-
     - add-ssh-key:
         keyname: KUBERNETES_SSH_KEY
     - add-to-known_hosts:
@@ -72,7 +66,7 @@ deploy:
 
     # Setup kubectl
     - script:
-        name: download & setup kubectl
+        name: setup kubectl
         code: |
           wget -O /tmp/setup-kubectl.sh https://gist.githubusercontent.com/metral/ce436c6d70b4324262b8dcbd81ce8f34/raw/f3248247281f663ff4471cce0bc54f01aad59bb6/setup-wercker-kubectl.sh
           chmod +x /tmp/setup-kubectl.sh
@@ -86,9 +80,6 @@ deploy:
 
   # Prod deploy target
   prod:
-    - install-packages:
-      packages: curl wget openssh-client
-
     - add-ssh-key:
         keyname: KUBERNETES_SSH_KEY
     - add-to-known_hosts:
@@ -100,7 +91,7 @@ deploy:
 
     # Setup kubectl
     - script:
-        name: download & setup kubectl
+        name: setup kubectl
         code: |
           wget -O /tmp/setup-kubectl.sh https://gist.githubusercontent.com/metral/ce436c6d70b4324262b8dcbd81ce8f34/raw/f3248247281f663ff4471cce0bc54f01aad59bb6/setup-wercker-kubectl.sh
           chmod +x /tmp/setup-kubectl.sh

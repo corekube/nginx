@@ -7,6 +7,10 @@ cat > nginx-deployment.yaml << EOF
    name: nginx-deployment
  spec:
    replicas: 1
+   selector:
+     matchLabels:
+      app: nginx
+      env: dev
    template:
      metadata:
        name: nginx
@@ -18,35 +22,11 @@ cat > nginx-deployment.yaml << EOF
        containers:
          - name: nginx
            image: ${DOCKER_REPO}:${IMAGE_TAG}
-           env:
-             - name: SERVER_NAME
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: server.name
-             - name: ROOT_DIR
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: root.dir
-             - name: ENABLE_SSL
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: enable.ssl
            ports:
              - name: http
                containerPort: 80
              - name: https
                containerPort: 443
-           livenessProbe:
-             httpGet:
-               path: /
-               port: 443
-               scheme: HTTPS
-             initialDelaySeconds: 10
-             periodSeconds: 30
-             timeoutSeconds: 5
            readinessProbe:
              httpGet:
                path: /
@@ -54,18 +34,22 @@ cat > nginx-deployment.yaml << EOF
                scheme: HTTPS
              initialDelaySeconds: 5
              timeoutSeconds: 1
+           livenessProbe:
+             httpGet:
+               path: /
+               port: 443
+               scheme: HTTPS
+             initialDelaySeconds: 10
+             timeoutSeconds: 5
            volumeMounts:
-             - name: ssl-secret
-               mountPath: /etc/ssl-secret
+             - name: nginx-config
+               mountPath: /etc/config
              - name: nginx-nfs-pvc
                mountPath: /srv/
        volumes:
          - name: nginx-config
            configMap:
              name: nginx-config
-         - name: ssl-secret
-           configMap:
-             name: ssl-secret
          - name: nginx-nfs-pvc
            persistentVolumeClaim:
              claimName: nginx-nfs-pvc

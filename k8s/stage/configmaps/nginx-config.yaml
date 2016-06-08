@@ -3,6 +3,18 @@ kind: ConfigMap
 metadata:
   name: nginx-config
 data:
-  server.name: "stage.corekube.com"
-  root.dir: "/srv/data/stage/dest"
-  enable.ssl: "true"
+  nginx: |
+    #!/bin/bash
+
+    # settings
+    export ENABLE_SSL="true"
+    export SERVER_NAME="stage.corekube.com"
+
+    # directory paths
+    ## letsencrypt
+    export LETSENCRYPT_DIR="/srv/etc/letsencrypt"
+    export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/corekube.com"
+    export SSL_DHPARAMS="$LETSENCRYPT_DIR/dhparams.pem"
+    export LETSENCRYPT_ACME_DIR="$LETSENCRYPT_DIR/webrootauth/.well-known/acme-challenge"
+    ## nginx
+    export ROOT_DIR="/srv/data/stage/dest"

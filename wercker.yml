@@ -46,7 +46,7 @@ build:
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL
-        channel: notifications
+        channel: $SLACK_CHANNEL
         username: $SLACK_USER
 
 deploy:
@@ -108,5 +108,5 @@ deploy:
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL
-        channel: notifications
+        channel: $SLACK_CHANNEL
         username: $SLACK_USER

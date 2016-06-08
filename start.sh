@@ -12,6 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
+# source nginx-config
+source /etc/config/nginx
+
 # Remove existing configs, if any
 rm /etc/nginx/conf.d/*.conf
 
@@ -25,10 +28,15 @@ else
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
 fi
 
-# Insert env vars from nginx-config
-sed -i "s#{{SERVER_NAME}}#$SERVER_NAME#g;" /etc/nginx/conf.d/proxy.conf
+# Insert env vars to configure nginx
+sed -i "s#{{LETSENCRYPT_DIR}}#$LETSENCRYPT_DIR#g;" /etc/nginx/conf.d/proxy.conf
+sed -i "s#{{SSL_CERTS_DIR}}#$SSL_CERTS_DIR#g;" /etc/nginx/conf.d/proxy.conf
+sed -i "s#{{LETSENCRYPT_ACME_DIR}}#$LETSENCRYPT_ACME_DIR#g;" /etc/nginx/conf.d/proxy.conf
 sed -i "s#{{ROOT_DIR}}#$ROOT_DIR#g;" /etc/nginx/conf.d/proxy.conf
 
+sed -i "s#{{SERVER_NAME}}#$SERVER_NAME#g;" /etc/nginx/conf.d/proxy.conf
+
+# Show proxy.conf for logs
 cat /etc/nginx/conf.d/proxy.conf
 
 echo "Starting nginx..."

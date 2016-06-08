@@ -22,22 +22,6 @@ cat > nginx-deployment.yaml << EOF
        containers:
          - name: nginx
            image: ${DOCKER_REPO}:${IMAGE_TAG}
-           env:
-             - name: SERVER_NAME
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: server.name
-             - name: ROOT_DIR
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: root.dir
-             - name: ENABLE_SSL
-               valueFrom:
-                 configMapKeyRef:
-                   name: nginx-config
-                   key: enable.ssl
            ports:
              - name: http
                containerPort: 80
@@ -58,17 +42,14 @@ cat > nginx-deployment.yaml << EOF
              initialDelaySeconds: 10
              timeoutSeconds: 5
            volumeMounts:
-             - name: ssl-secret
-               mountPath: /etc/ssl-secret
+             - name: nginx-config
+               mountPath: /etc/config
              - name: nginx-nfs-pvc
                mountPath: /srv/
        volumes:
          - name: nginx-config
            configMap:
              name: nginx-config
-         - name: ssl-secret
-           configMap:
-             name: ssl-secret
          - name: nginx-nfs-pvc
            persistentVolumeClaim:
              claimName: nginx-nfs-pvc

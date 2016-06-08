@@ -43,11 +43,6 @@ CONFIGMAP_NAME=$APP_NAME-config
 CONFIGMAP_FILEPATH=k8s/$APP_ENV/configmaps/${CONFIGMAP_NAME}.yaml
 kubectl --namespace=$NAMESPACE apply -f $CONFIGMAP_FILEPATH
 
-# apply ssl secret (really, its a configmap until Secrets can auto-update)
-SSL_SECRET_NAME=ssl-secret
-SSL_SECRET_FILEPATH=/srv/corekube/k8s/secrets/$APP_NAME/$APP_ENV/${SSL_SECRET_NAME}.yaml
-kubectl --namespace=$NAMESPACE apply -f $SSL_SECRET_FILEPATH
-
 # apply || replace deployment
 DEPLOYMENT_FILEPATH=k8s/$APP_ENV/deployment/$APP_NAME-deployment.yaml
 pushd k8s/$APP_ENV/deployment > /dev/null

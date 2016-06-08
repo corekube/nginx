@@ -7,6 +7,10 @@ cat > nginx-deployment.yaml << EOF
    name: nginx-deployment
  spec:
    replicas: 2
+   selector:
+     matchLabels:
+      app: nginx
+      env: stage
    template:
      metadata:
        name: nginx
@@ -39,14 +43,6 @@ cat > nginx-deployment.yaml << EOF
                containerPort: 80
              - name: https
                containerPort: 443
-           livenessProbe:
-             httpGet:
-               path: /
-               port: 443
-               scheme: HTTPS
-             initialDelaySeconds: 10
-             periodSeconds: 30
-             timeoutSeconds: 5
            readinessProbe:
              httpGet:
                path: /
@@ -54,6 +50,13 @@ cat > nginx-deployment.yaml << EOF
                scheme: HTTPS
              initialDelaySeconds: 5
              timeoutSeconds: 1
+           livenessProbe:
+             httpGet:
+               path: /
+               port: 443
+               scheme: HTTPS
+             initialDelaySeconds: 10
+             timeoutSeconds: 5
            volumeMounts:
              - name: ssl-secret
                mountPath: /etc/ssl-secret

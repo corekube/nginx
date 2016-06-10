@@ -31,11 +31,12 @@ This nginx webserver:
            export ROOT_DIR="/srv/data/prod/dest"
       ```
     * SSL/TLS certs to be used with nginx are provided via a Kubernetes Volume named `nginx-nfs-pvc`
-      * The required certs are based off of the [letsencrypt.org](https://letsencrypt.org) cert directory structure in `/etc/letsencrypt/live/<DOMAIN>` and the Volume path mounted should expose the `/etc/letsencrypt` directory in its entirety. You can specify the location of the `/etc/letsencrypt` directory in your volume, in `nginx-config`.
+      * The required certs are based off of the [letsencrypt.org](https://letsencrypt.org) cert directory structure in `/etc/letsencrypt/live/<DOMAIN>` and the Volume path mounted should expose the `/etc/letsencrypt` directory in its entirety. You can specify the location of the `/etc/letsencrypt` directory in your volume using `LETSENCRYPT_DIR` in `nginx-config`.
 
   2.  Faciliates the ACME request that [letsencrypt.org](https://letsencrypt.org) requires when attempting to validate the Domain and renew its certs, given that:
   
-    * The [letsencrypt.org](https://letsencrypt.org) directory, `/etc/letsencrypt`, is mounted via a Kubernetes Volume.
+    * The [letsencrypt.org](https://letsencrypt.org) directory, `/etc/letsencrypt`, is mounted via a Kubernetes Volume - in this case, we use the `LETSENCRYPT_DIR` in `nginx-config`.
+
 
     * The nginx configuration has an alias for the ACME request as a location, in the following format, to reference the Volume where the certs are stored:
 

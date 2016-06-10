@@ -10,10 +10,10 @@ data:
     export ENABLE_SSL="true"
     export SERVER_NAME="dev.corekube.com"
 
-    # directory paths
-    ## letsencrypt
+    # letsencrypt paths
     export LETSENCRYPT_DIR="/srv/etc/letsencrypt"
-    export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/corekube.com"
     export LETSENCRYPT_ACME_DIR="$LETSENCRYPT_DIR/webrootauth/.well-known/acme-challenge"
-    ## nginx
+
+    ## nginx paths
     export ROOT_DIR="/srv/data/dev/dest"
+    export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/$SERVER_NAME"

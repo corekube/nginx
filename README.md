@@ -6,7 +6,7 @@ A nginx Docker container that is deployed on Kubernetes to serve local, static c
 
 This nginx webserver:
 
-  1. Configures nginx according to settings outlined in a ConfigMap named `nginx-config` (included in code):
+  1. Configures nginx according to settings outlined in ConfigMaps:
     * Configuration settings to be used in nginx are provided via a Kubernetes ConfigMap named `nginx-config`, defined as such as:
 
       ```
@@ -15,42 +15,36 @@ This nginx webserver:
        metadata:
          name: nginx-config
        data:
-         server.name: "corekube.com"
-         enable.ssl: "true"
+         nginx: |
+           #!/bin/bash
+
+           # settings
+           export ENABLE_SSL="true"
+           export SERVER_NAME="corekube.com"
+
+           # directory paths
+           ## letsencrypt
+           export LETSENCRYPT_DIR="/srv/etc/letsencrypt"
+           export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/corekube.com"
+           export LETSENCRYPT_ACME_DIR="$LETSENCRYPT_DIR/webrootauth/.well-known/acme-challenge"
+           ## nginx
+           export ROOT_DIR="/srv/data/prod/dest"
       ```
-    * Configures nginx's SSL/TLS certs according to settings outlined in a ConfigMap named `ssl-secret` (not included in code)
-      * The required certs are based off of the [letsencrypt.org](https://letsencrypt.org) cert directory structure in `/etc/letsencrypt/live/<DOMAIN>` and are expected to be defined in `ssl-secret` as such:
-  
-        ```
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: ssl-secret
-        data:
-          fullchain.pem: |
-            <FULLCHAIN>
-          cert.pem: |
-            <CERT>
-          privkey.pem: |
-            <PRIVKEY>
-          dhparams.pem: |
-            <DHPARAMS>
-          chain.pem: |
-            <CHAIN>
-        ```
+    * SSL/TLS certs to be used with nginx are provided via a Kubernetes Volume named `nginx-nfs-pvc`
+      * The required certs are based off of the [letsencrypt.org](https://letsencrypt.org) cert directory structure in `/etc/letsencrypt/live/<DOMAIN>` and the Volume path mounted should expose the `/etc/letsencrypt` directory in its entirety. You can specify the location of the `/etc/letsencrypt` directory in your volume, in `nginx-config`.
+
   2.  Faciliates the ACME request that [letsencrypt.org](https://letsencrypt.org) requires when attempting to validate the Domain and renew its certs, given that:
   
-    * The [letsencrypt.org](https://letsencrypt.org) directory, `/etc/letsencrypt`, is mounted in `/srv/` as `/srv/etc/letsencrypt`.
+    * The [letsencrypt.org](https://letsencrypt.org) directory, `/etc/letsencrypt`, is mounted via a Kubernetes Volume.
 
-      * In this particular case, we're accessing an NFS server provided by a Kubernetes Volume named `nginx-nfs-pvc`, but this setup is not strictly required
-    * The nginx configuration has an alias for the ACME request, in the following format, to utilize the `/srv/etc/letsencrypt` directory when a renewal is requested:
+    * The nginx configuration has an alias for the ACME request as a location, in the following format, to reference the Volume where the certs are stored:
 
         ```
         server {
           ...
           location /.well-known/acme-challenge {
-            alias /srv/etc/letsencrypt/webrootauth/.well-known/acme-challenge;
+            alias {{LETSENCRYPT_ACME_DIR}};
           }
         }
         ```
-  3. And lastly, serves the static HTML stored in the root directory, specified by `root.dir` in the `nginx-config` ConfigMap
+  3. And lastly, serves the static HTML stored in the root directory, specified by `ROOT_DIR` in the `nginx-config` ConfigMap

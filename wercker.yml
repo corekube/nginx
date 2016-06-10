@@ -15,12 +15,6 @@ build:
         code: |
           ./hack/test-nginx.sh
 
-    ## Integration tests
-    #- script:
-    #    name: integration tests
-    #    code: |
-    #      ./hack/test-integrations.sh
-
     # Source repo envvars for used to build Docker image
     - script:
         name: source repo envvars
@@ -37,12 +31,6 @@ build:
         entrypoint: /usr/src/start.sh
 
   after-steps:
-    ## Cleanup integration tests
-    #- script:
-    #    name: cleanup
-    #    code: |
-    #      ./hack/cleanup.sh
-
     # Notify slack
     - slack-notifier:
         url: $SLACK_URL
@@ -50,7 +38,7 @@ build:
         username: $SLACK_USER
 
 deploy:
-  box: corekube/basics:0.0.1
+  box: corekube/basics:0.0.2
   # The steps that will be executed in the DEPLOY pipeline
 
   # Stage deploy target

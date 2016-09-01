@@ -25,7 +25,7 @@ This nginx webserver:
            # directory paths
            ## letsencrypt
            export LETSENCRYPT_DIR="/srv/etc/letsencrypt"
-           export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/corekube.com"
+           export SSL_CERTS_DIR="$LETSENCRYPT_DIR/live/$SERVER_NAME"
            export LETSENCRYPT_ACME_DIR="$LETSENCRYPT_DIR/webrootauth/.well-known/acme-challenge"
            ## nginx
            export ROOT_DIR="/srv/data/prod/dest"
@@ -38,7 +38,7 @@ This nginx webserver:
     * The [letsencrypt.org](https://letsencrypt.org) directory, `/etc/letsencrypt`, is mounted via a Kubernetes Volume - in this case, we use the `LETSENCRYPT_DIR` in `nginx-config`.
 
 
-    * The nginx configuration has an alias for the ACME request as a location, in the following format, to reference the Volume where the certs are stored:
+    * The nginx configuration has an alias for the location that the ACME request expects:
 
         ```
         server {

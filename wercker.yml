@@ -75,14 +75,21 @@ deploy:
 
   # Prod deploy target
   prod:
+    - script:
+        name: retreive host fingerprints
+        code: |
+          FP=`TARGET_HOST=$KUBERNETES_MASTER_PUBLIC_IP; file=$(mktemp); ssh-keyscan $TARGET_HOST > $file 2> /dev/null; sed -i '/ssh-ed25519/d' $file; ssh-keygen -l -f $file | awk '{print $2}'`
+          export FP1=$(echo $FP | awk -F " " '{print $1}')
+          export FP2=$(echo $FP | awk -F " " '{print $2}')
+
     - add-ssh-key:
         keyname: KUBERNETES_SSH_KEY
     - add-to-known_hosts:
         hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT1
+        fingerprint: $FP1
     - add-to-known_hosts:
         hostname: $KUBERNETES_MASTER_PUBLIC_IP
-        fingerprint: $KUBERNETES_MASTER_FINGERPRINT2
+        fingerprint: $FP2
 
     # Setup kubectl
     - script:
@@ -91,6 +98,7 @@ deploy:
           curl -s -o /tmp/setup-kubectl.sh https://gist.githubusercontent.com/metral/ce436c6d70b4324262b8dcbd81ce8f34/raw/57e2f1aa107a6f2d1721aa36b69847b53554db9c/setup-wercker-kubectl.sh
           chmod +x /tmp/setup-kubectl.sh
           /tmp/setup-kubectl.sh
+
 
     # rollout
     - script:

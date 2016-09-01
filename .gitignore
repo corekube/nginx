@@ -5,3 +5,4 @@ _*
 nginx-config-secret
 nginx-config-secret.yaml
 wercker_*
+.wercker

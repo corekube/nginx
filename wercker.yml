@@ -38,7 +38,7 @@ build:
         username: $SLACK_USER
 
 deploy:
-  box: corekube/basics:0.0.2
+  box: corekube/basics:0.0.3
   # The steps that will be executed in the DEPLOY pipeline
 
   # Stage deploy target

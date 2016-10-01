@@ -30,9 +30,9 @@ build:
         repository: $DOCKER_REPO
         entrypoint: /usr/src/start.sh
 
+  # Notify slack of build status
   after-steps:
-    # Notify slack
-    - slack-notifier:
+    - metral/slack-notifier@1.2.2:
         url: $SLACK_URL
         channel: $SLACK_CHANNEL
         username: $SLACK_USER
@@ -109,8 +109,7 @@ stage:
 
   # Notify slack of build status
   after-steps:
-    # Notify slack
-    - slack-notifier:
+    - metral/slack-notifier@1.2.2:
         url: $SLACK_URL
         channel: $SLACK_CHANNEL
         username: $SLACK_USER
@@ -151,8 +150,7 @@ prod:
 
   # Notify slack of build status
   after-steps:
-    # Notify slack
-    - slack-notifier:
+    - metral/slack-notifier@1.2.2:
         url: $SLACK_URL
         channel: $SLACK_CHANNEL
         username: $SLACK_USER

@@ -69,11 +69,18 @@ deploy:
 
     # rollout
     - script:
-        name: rollout to stage
+        name: rollout to dev
         code: |
-          ./rollout.sh -e stage
+          ./rollout.sh -e dev
 
-# Prod deploy target
+  # Notify slack
+  after-steps:
+    - metral/slack-notifier@1.2.2:
+        url: $SLACK_URL
+        channel: $SLACK_CHANNEL
+        username: $SLACK_USER
+
+# Stage deploy pipeline
 stage:
   box: corekube/basics:0.0.3
   steps:
@@ -114,7 +121,7 @@ stage:
         channel: $SLACK_CHANNEL
         username: $SLACK_USER
 
-# Prod deploy target
+# Prod deploy pipeline
 prod:
   box: corekube/basics:0.0.3
   steps:

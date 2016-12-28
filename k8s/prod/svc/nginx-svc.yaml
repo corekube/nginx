@@ -1,21 +1,17 @@
- apiVersion: v1
- kind: Service
- metadata:
-   name: nginx-svc
-   labels:
-     name: nginx-svc
- spec:
-   type: NodePort
-   ports:
-   - name: http
-     port: 80
-     protocol: TCP
-     targetPort: http
-   - name: https
-     port: 443
-     protocol: TCP
-     targetPort: https
-     nodePort: 30100
-   selector:
-     app: nginx
-     env: prod
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  labels:
+    name: nginx-svc
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+    nodePort: 30100
+  selector:
+    app: nginx
+    env: stage

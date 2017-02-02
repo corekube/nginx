@@ -57,6 +57,8 @@ fi
 kubectl --namespace=$NAMESPACE $ACTION -f $DEPLOYMENT_FILEPATH
 
 # apply ingress & TLS secret
-INGRESS_NAME=nginx-ingress
-INGRESS_FILEPATH=k8s/$APP_ENV/ingress/${INGRESS_NAME}.yaml
-kubectl --namespace=$NAMESPACE apply -f $INGRESS_FILEPATH
+if [ "$NAMESPACE" = "prod" ] ; then
+  INGRESS_NAME=nginx-ingress
+  INGRESS_FILEPATH=k8s/$APP_ENV/ingress/${INGRESS_NAME}.yaml
+  kubectl --namespace=$NAMESPACE apply -f $INGRESS_FILEPATH
+fi
